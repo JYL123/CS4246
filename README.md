@@ -14,5 +14,6 @@
 
 * [package installation](https://stackoverflow.com/a/49418886/9243701)
 
-
+## Note
+* `pip install gym` and `pip install gym[atari]` to run `breakout env`
 
