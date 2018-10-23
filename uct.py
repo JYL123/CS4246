@@ -13,14 +13,14 @@ action_times = dict.fromkeys([0, 1, 2, 3], default_value)
 c = 0.2 # for UCT
 
 # run game for total steps
-total = 20
+total = 200
 for episode in range(total):
     # initialize the environment
     i_observation = env.reset()
     # calculate rewards being the number of pixel changed 0
     cal_reward = 0
 
-    steps = 20 # each game go 20 steps
+    steps = 200 # each game go 20 steps
     for step in range(steps):
         # current state
 	# no render() because visualization is not available on the cluster
