@@ -23,7 +23,8 @@ for episode in range(total):
     steps = 20 # each game go 20 steps
     for step in range(steps):
         # current state
-        env.render()
+	# no render() because visualization is not available on the cluster
+        # env.render()
         print(i_observation) # observation of the env, values being the pixel intensity of the env
         # Show the observation using OpenCV
         # cv2.imshow('obs', i_observation)
@@ -31,9 +32,9 @@ for episode in range(total):
 
         # choose action
         # sample k number times of actions, run trials to evaluate acitons
-        k = 30
+        k = 300
         for i in range(k):
-            env.render()
+            # env.render()
             print("sample actions to run simulation: ")
             print(i)
             # sample an action to run trials
@@ -41,13 +42,13 @@ for episode in range(total):
             action_times[action] = action_times[action] + 1
             # print("action: ")
             # print(action)
-            # look ahead 20 steps for each sampled aciton
-            trial_steps = 50
+            # look ahead 100 steps for each sampled aciton
+            trial_steps = 100
             trial_reward = 0 # initial reward is 0
             trial_utility = 0
             for trial_step in range(trial_steps):
                 print("running simulation: ")
-                env.render()
+                # env.render()
                 prev_observation = i_observation
 
                 # choose actions with best values in trials
