@@ -2,6 +2,7 @@ import math
 import cv2
 import numpy as np
 import gym
+from copy import copy
 
 
 # set up the env
@@ -17,38 +18,39 @@ total = 200
 for episode in range(total):
     # initialize the environment
     i_observation = env.reset()
-    # calculate rewards being the number of pixel changed 0
-    cal_reward = 0
 
-    steps = 200 # each game go 20 steps
+    steps = 20 # each game goes 200 steps
     for step in range(steps):
         # current state
-	# no render() because visualization is not available on the cluster
-        # env.render()
+        # no render() because visualization is not available on the cluster
+        env.render()
         print(i_observation) # observation of the env, values being the pixel intensity of the env
         # Show the observation using OpenCV
         # cv2.imshow('obs', i_observation)
         # cv2.waitKey(1)
 
-        # choose action
-        # sample k number times of actions, run trials to evaluate acitons
-        k = 300
+        # evaluate actions
+        # sample k number times of actions, run trials to evaluate them
+        k = 30
+        # save state to be restored
+        save_state = copy(env)
+
         for i in range(k):
             # env.render()
-            print("sample actions to run simulation: ")
-            print(i)
-            # sample an action to run trials
+            # print("sample actions to run simulation: ")
             action = env.action_space.sample()
-            action_times[action] = action_times[action] + 1
-            # print("action: ")
             # print(action)
-            # look ahead 100 steps for each sampled aciton
-            trial_steps = 100
-            trial_reward = 0 # initial reward is 0
+            # increase the count of the action
+            action_times[action] = action_times[action] + 1
+            # look ahead 100 steps for each sampled action
+            trial_steps = 20
+            trial_reward = 0
             trial_utility = 0
+
             for trial_step in range(trial_steps):
-                print("running simulation: ")
-                # env.render()
+                # print("running simulation: ")
+
+                # env.env.restore_state(save_state)
                 prev_observation = i_observation
 
                 # choose actions with best values in trials
@@ -59,7 +61,8 @@ for episode in range(total):
                         try_action = key
 
                 # run trial with the chosen action
-                curr_observation, reward, done, info = env.step(try_action)
+                # return these 4 variables after the action is taken
+                curr_observation, reward, done, info = save_state.step(try_action)
                 # reward received: number of blocks being hit, reward = number of 0 increased
                 m1 = np.count_nonzero(prev_observation)
                 m2 = np.count_nonzero(curr_observation)
@@ -71,27 +74,21 @@ for episode in range(total):
             # calculate UCT
             # the value will be over-written several times, instead of being updated?
             # action_times[action]+1 to make sure it is not 0
-            action_value[action] = trial_utility + c*math.sqrt(math.log(i+1)/(action_times[action]+1))
+            action_value[action] = (trial_utility + action_value[action]*(action_times[action]-1))/action_times[action] + c*math.sqrt(math.log(i+1)/(action_times[action]+1))
 
+        # env.env.restore_state(save_state)
         # choose the best action
         max_action = 0
         for key in action_value:
             if action_value[key] > action_value[max_action]:
                 max_action = key
-        for key in action_value:
-            print("action: ")
-            print(key)
-            print("value: ")
-            print(action_value[key])
+
         print("best action: ")
         print(max_action)
 
+        env.render()
         observation, reward, done, info = env.step(max_action)
         i_observation = observation # update observation
-        print("reward: ")
-        print(reward)
-        print("info: ")
-        print(info)
 
         if done:
             print("Episode finished after {} timesteps".format(episode+1))
