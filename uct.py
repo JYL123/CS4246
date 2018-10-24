@@ -34,14 +34,15 @@ for episode in range(total):
         # Show the observation using OpenCV
         # cv2.imshow('obs', i_observation)
         # cv2.waitKey(1)
-        saved = env.env.clone_state()
+        saved = env.env.clone_full_state()
         # evaluate actions
         # sample k number times of actions, run trials to evaluate them
         k = 30
         # save state to be restored
         action_Q = dict.fromkeys([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 0)
         for i in range(k):
-            env.env.restore_state(saved)
+            env.reset()
+            env.env.restore_full_state(saved)
             # env.render()
             # print("sample actions to run simulation: ")
             action = env.action_space.sample()
@@ -89,7 +90,8 @@ for episode in range(total):
             action_value[action] = (action_Q[action]/action_times[action] + c*math.sqrt(math.log(i+1)/(action_times[action]+0.0000000001)))
             #print("updated value: ")
             #print(action_value[action])
-        env.env.restore_state(saved)
+        env.reset()
+        env.env.restore_full_state(saved)
         # choose the best action
         max_action = 14
         for key in action_value:
