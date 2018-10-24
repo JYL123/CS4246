@@ -16,7 +16,7 @@ c = 0.6 # for UCT
 print(env.action_space)
 
 # run game for total steps
-total = 25
+total = 200
 for episode in range(total):
     # initialize the environment
     i_observation = env.reset()
