@@ -15,7 +15,6 @@ c = 0.6 # for UCT
 
 print(env.action_space)
 
-
 # run game for total steps
 total = 25
 for episode in range(total):
@@ -79,6 +78,8 @@ for episode in range(total):
             # the value will be over-written several times, instead of being updated?
             # action_times[action]+1 to make sure it is not 0
             action_value[action] = (trial_utility + action_value[action]*(action_times[action]-1))/action_times[action] + c*math.sqrt(math.log(i+1)/(action_times[action]+1))
+            print("updated value: ")
+            print(action_value[action])
 
         # env.env.restore_state(save_state)
         # choose the best action
