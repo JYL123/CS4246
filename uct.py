@@ -6,25 +6,29 @@ from copy import copy
 
 
 # set up the env
-env = gym.make('Breakout-ram-v0')
+env = gym.make('Centipede-ram-v0')
 default_value = 0
 # 4 actions from the action space
-action_value = dict.fromkeys([0, 1, 2, 3], default_value)
-action_times = dict.fromkeys([0, 1, 2, 3], default_value)
-c = 0.2 # for UCT
+action_value = dict.fromkeys([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], default_value)
+action_times = dict.fromkeys([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], default_value)
+c = 0.6 # for UCT
+
+print(env.action_space)
+
 
 # run game for total steps
-total = 200
+total = 25
 for episode in range(total):
     # initialize the environment
     i_observation = env.reset()
+    utility = 0
 
     steps = 20 # each game goes 200 steps
     for step in range(steps):
         # current state
         # no render() because visualization is not available on the cluster
-        env.render()
-        print(i_observation) # observation of the env, values being the pixel intensity of the env
+        # env.render()
+        # print(i_observation) # observation of the env, values being the pixel intensity of the env
         # Show the observation using OpenCV
         # cv2.imshow('obs', i_observation)
         # cv2.waitKey(1)
@@ -64,10 +68,10 @@ for episode in range(total):
                 # return these 4 variables after the action is taken
                 curr_observation, reward, done, info = save_state.step(try_action)
                 # reward received: number of blocks being hit, reward = number of 0 increased
-                m1 = np.count_nonzero(prev_observation)
-                m2 = np.count_nonzero(curr_observation)
-                trial_reward = m2 - m1
-                trial_utility = trial_utility + trial_reward
+                # m1 = np.count_nonzero(prev_observation)
+                # m2 = np.count_nonzero(curr_observation)
+                # trial_reward = m2 - m1
+                trial_utility = trial_utility + reward
 
                 prev_observation = curr_observation
 
@@ -85,12 +89,16 @@ for episode in range(total):
 
         print("best action: ")
         print(max_action)
+        print(action_value[max_action])
 
         env.render()
         observation, reward, done, info = env.step(max_action)
         i_observation = observation # update observation
+        utility = utility + reward
+        print("utility: ")
+        print(utility)
 
         if done:
-            print("Episode finished after {} timesteps".format(episode+1))
+            print("Episode finished after {} time steps".format(episode+1))
             break
 env.close()
