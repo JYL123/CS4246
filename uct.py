@@ -92,7 +92,6 @@ for episode in range(total):
         print(max_action)
         print(action_value[max_action])
 
-        env.render()
         observation, reward, done, info = env.step(max_action)
         i_observation = observation # update observation
         utility = utility + reward
