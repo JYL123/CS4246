@@ -49,6 +49,20 @@ for episode in range(total):
                 if action_value[key] > action_value[action]:
                     action = key
             # print(action)
+            # increase the count of the action
+            action_times[action] = action_times[action] + 1
+            # look ahead 100 steps for each sampled action
+            trial_steps = 100
+            trial_reward = 0
+            trial_utility = reward
+            gamma = 0.5
+
+            for trial_step in range(trial_steps):
+                # print("running simulation: ")
+
+                # env.env.restore_state(save_state)
+                prev_observation = i_observation
+
 
                 # choose actions with best values in trials
                 # ran_action = env.action_space.sample()
