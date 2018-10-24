@@ -57,10 +57,10 @@ for episode in range(total):
             trial_reward = 0
             trial_utility = reward
             gamma = 0.5
-
+            total_gamma = 1
             for trial_step in range(trial_steps):
                 # print("running simulation: ")
-
+                total_gamma = total_gamma * gamma
                 # env.env.restore_state(save_state)
                 prev_observation = i_observation
 
@@ -79,7 +79,7 @@ for episode in range(total):
                 # m1 = np.count_nonzero(prev_observation)
                 # m2 = np.count_nonzero(curr_observation)
                 # trial_reward = m2 - m1
-                trial_utility = trial_utility + gamma * trial_reward
+                trial_utility = trial_utility + total_gamma * trial_reward
 
                 prev_observation = curr_observation
 
