@@ -15,13 +15,13 @@ env = gym.make('Centipede-ram-v0')
 # Q_table = [[0]*128 for i in range(18)]
 Q_table = defaultdict(float)
 # frequency table
-N_table = defaultdict(float)
+N_table = defaultdict(int)
 # others 
 utility = 0 
 steps  = 0
 gamma= 0.99
 epsilon = 0.1
-Transition = namedtuple('Transition', ['s', 'a', 'r', 's_next', 'done'])
+SavedState = namedtuple('SavedState', ['state'])
 
 
 prev_s = None
@@ -39,42 +39,53 @@ def epsilon_greedy(s):
     actions_with_max_q = [a for a, q in qvals.items() if q == max_q]
     return np.random.choice(actions_with_max_q)
 
-def update_Q_value(Transit):
+def update_Q_value(prev_state, action, reward, next_state):
     # previous_state, previous_action, previous_reward, current_state
-    max_q_next = max([Q_table[Transit.s_next, a] for a in range(env.action_space.n)])
+    max_q_next = max([Q_table[next_state, a] for a in range(env.action_space.n)])
+    # update N table
+    N_table[prev_state, action] = N_table[prev_state, action] + 1
     # We do not include the value of the next state if terminated.
-    Q_table[Transit.s, Transit.a] += (1/N_table[Transit.s, Transit.a]) * (
-        Transit.r + gamma * max_q_next  - Q_table[Transit.s, Transit.a])
+    Q_table[prev_state, action] += (1/N_table[prev_state, action]) * (
+        reward + gamma * max_q_next  - Q_table[prev_state, action])
 
 print(Q_table)
 
 # run game for a number of runs
-samples = 23
+samples = 100
 for sameple in range(samples):
     # initialize the environment
     curr_s = env.reset()
     curr_r = 0
     done = False
+    step = 0
 
-    while not done:
-        prev_a = epsilon_greedy(curr_s)
-        print(prev_a)
+    while not done:        
+        prev_a = epsilon_greedy(SavedState(ImmutableMatrix(curr_s)))
+        
+        
         next_state, reward, done, info = env.step(prev_a)
         if reward is not None:
             prev_r = reward
             utility = utility + reward
         
+        if reward != 0.0:
+         print(reward)
+
         prev_s = curr_s
         curr_s = next_state
-        print(curr_s)
         
-        update_Q_value(Transition(prev_s, prev_a, prev_r, curr_s, done))
+        update_Q_value(SavedState(ImmutableMatrix(prev_s)), prev_a, reward, SavedState(ImmutableMatrix(curr_s)))
         
         steps = steps + 1
         epsilon = epsilon - 0.001
+        #print("utility:")
+        #print(utility)
 
-print("Numbere of steps for the game:")
-print(steps)
-print("Utility value: ")
-print(utility)
+        
+    print("steps:")
+    print(steps)
+    print("Utility value: ")
+    print(utility)
+    print(list(Q_table.items()))
+
 
