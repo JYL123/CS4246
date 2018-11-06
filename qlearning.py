@@ -40,11 +40,11 @@ def epsilon_greedy(s):
     return np.random.choice(actions_with_max_q)
 
 def update_Q_value(prev_state, action, reward, next_state):
-    # previous_state, previous_action, previous_reward, current_state
+    # choose the best action for the next state
     max_q_next = max([Q_table[next_state, a] for a in range(env.action_space.n)])
     # update N table
     N_table[prev_state, action] = N_table[prev_state, action] + 1
-    # We do not include the value of the next state if terminated.
+    # update Q table
     Q_table[prev_state, action] += (1/N_table[prev_state, action]) * (
         reward + gamma * max_q_next  - Q_table[prev_state, action])
 
@@ -62,7 +62,6 @@ for sameple in range(samples):
     while not done:        
         prev_a = epsilon_greedy(SavedState(ImmutableMatrix(curr_s)))
         
-        
         next_state, reward, done, info = env.step(prev_a)
         if reward is not None:
             prev_r = reward
@@ -78,9 +77,6 @@ for sameple in range(samples):
         
         steps = steps + 1
         epsilon = epsilon - 0.001
-        #print("utility:")
-        #print(utility)
-
         
     print("steps:")
     print(steps)
