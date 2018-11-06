@@ -11,8 +11,7 @@ env = gym.make('Centipede-ram-v0')
 # print(env.action_space) = 18
 # print(env.observation_space) = 128
 
-# Q table size :actions^states
-# Q_table = [[0]*128 for i in range(18)]
+# Potential Q table size :actions^states
 Q_table = defaultdict(float)
 # frequency table
 N_table = defaultdict(int)
@@ -40,11 +39,12 @@ def epsilon_greedy(s):
     return np.random.choice(actions_with_max_q)
 
 def update_Q_value(prev_state, action, reward, next_state):
+    # get the q value for next state with its possible acitons ['possible action' due to epsilon-greedy action selection]
     next_action = epsilon_greedy(next_state)
     q_value_next_state = Q_table[next_state, next_action]
     # update N table
     N_table[prev_state, action] = N_table[prev_state, action] + 1
-    # We do not include the value of the next state if terminated.
+    # update Q table
     Q_table[prev_state, action] += (1/N_table[prev_state, action]) * (
         reward + gamma * q_value_next_state  - Q_table[prev_state, action])
 
