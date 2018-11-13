@@ -62,6 +62,8 @@ def parallel_run_trials(action_samples, saved, i_observation, action_Q, action_t
     # assign 4 processors
     pool = mp.Pool(4)
     [pool.apply_async(run_trials(saved, i_observation, action_Q, action_times, sameple_times)) for sameple_times in range(action_samples)]  
+    # shut down the pool
+    pool.close() 
 
 # run game for total steps
 total = 23
