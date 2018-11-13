@@ -30,8 +30,8 @@ def run_trials(saved, i_observation, action_Q, action_times, sameple_times):
     # increase the count of the action
     action_times[action] = action_times[action] + 1
 
-    # look ahead 100 steps for each sampled action
-    trial_steps = 100
+    # look ahead 30 steps for each sampled action
+    trial_steps = 30
     trial_reward = 0
     trial_utility = reward
     gamma = 0.5
@@ -82,7 +82,7 @@ for episode in range(total):
         
         # evaluate actions
         # sample k number times of actions, run trials to evaluate them
-        k = 30
+        k = 100
 
         # record down the avergae value for each action simulated
         action_Q = dict.fromkeys([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 0)
