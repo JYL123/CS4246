@@ -4,6 +4,7 @@ import gym
 import numpy as np
 import math
 import random
+import pandas as pd
 
 # set up env
 env = gym.make('Centipede-ram-v0')
@@ -48,13 +49,13 @@ def update_Q_value(prev_state, action, reward, next_state):
     Q_table[prev_state, action] += (1/N_table[prev_state, action]) * (
         reward + gamma * max_q_next  - Q_table[prev_state, action])
 
-print(Q_table)
-
 # run game for a number of runs
 samples = 100
 for sameple in range(samples):
     # initialize the environment
     curr_s = env.reset()
+    utility = 0 
+    steps  = 0
     curr_r = 0
     done = False
     step = 0
@@ -67,8 +68,8 @@ for sameple in range(samples):
             prev_r = reward
             utility = utility + reward
         
-        if reward != 0.0:
-         print(reward)
+        # if reward != 0.0:
+        #  print(reward)
 
         prev_s = curr_s
         curr_s = next_state
@@ -82,6 +83,6 @@ for sameple in range(samples):
     print(steps)
     print("Utility value: ")
     print(utility)
-    print(list(Q_table.items()))
-
+    df2 = pd.DataFrame([[steps, utility]], columns=["Steps", "Utility"])
+    df2.to_csv("qlearning_out.csv", header=None, mode="a")
 
