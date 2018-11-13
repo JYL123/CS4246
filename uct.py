@@ -59,11 +59,13 @@ def run_trials(saved, i_observation, action_Q, action_times, sameple_times):
     action_value[action] = (action_Q[action]/action_times[action] + c*math.sqrt(math.log(sameple_times+1)/(action_times[action]+0.0000000001)))
 
 def parallel_run_trials(action_samples, saved, i_observation, action_Q, action_times):
-    # number of processes run at the same time
-    pool = mp.Pool(8)
+    # max number of processes run at the same time
+    pool = mp.Pool(30)
     [pool.apply_async(run_trials(saved, i_observation, action_Q, action_times, sameple_times)) for sameple_times in range(action_samples)]  
-    # shut down the pool
+    # no more new processes
     pool.close() 
+    # wait till all trails return as we are using async 
+    pool.join()
 
 # run game for total steps
 total = 23
