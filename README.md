@@ -12,4 +12,4 @@
 
 ## Note
 * `pip install gym` and `pip install gym[atari]` to run `breakout env`
-
+* You need to change the file path on your PC in order for `uct.py` `read` and `write` file properly. This also means that `uct.py` cannot be trained on the server. `read` and `write` make sure that we can trian and get data discretely. Comparing to `uct.py`, `qlearning.py` and `sarsa.py` run much faster, thus we can get result in one shot.
