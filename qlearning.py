@@ -88,7 +88,7 @@ def update_Q_value(prev_state, action, reward, next_state, done):
         reward + gamma * max_q_next * (1 - done) - Q_table[prev_state, action])
 
 # run game for a number of runs
-samples = 10
+samples = 1000
 eps_drop = (epsilon - final_epsilon) / samples * 2
 for sameple in range(samples):
     # initialize the environment
@@ -120,6 +120,8 @@ for sameple in range(samples):
     
     if(epsilon > final_epsilon):
          epsilon -= eps_drop
+         if(epsilon < final_epsilon):
+            epsilon = final_epsilon
         
     print("epsilon:")
     print(epsilon)
