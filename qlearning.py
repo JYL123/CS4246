@@ -61,7 +61,7 @@ for sameple in range(samples):
 
     while not done:        
         prev_a = epsilon_greedy(SavedState(ImmutableMatrix(curr_s)))
-        
+        #env.render()
         next_state, reward, done, info = env.step(prev_a)
         if reward is not None:
             prev_r = reward
