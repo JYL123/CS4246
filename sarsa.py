@@ -132,4 +132,4 @@ for sameple in range(samples):
     print(utility)
     df2 = pd.DataFrame([[steps, utility]], columns=["Steps", "Ut1ility"])
     df2.to_csv("qlearning_out.csv", header=None, mode="a")
-    save_data(Q_table, N_table, "./data/qlearning_data/ntable.txt", "./data/qlearning_data/qtable.txt")
+    save_data(Q_table, N_table, "./data/sarsa_data/ntable.txt", "./data/sarsa_data/qtable.txt")
