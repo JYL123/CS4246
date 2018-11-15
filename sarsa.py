@@ -16,8 +16,8 @@ from random import random
 env = gym.make('Centipede-ram-v0')
 seed(150)
 
-Qtablepath = "qlearning_Qtable.json"
-Ntablepath = "qlearning_Ntable.json"
+Qtablepath = "sarsa_Qtable.json"
+Ntablepath = "sarsa_Ntable.json"
 
 
 # print(env.action_space) = 18
@@ -31,7 +31,7 @@ Q_table = defaultdict(float)
 N_table = defaultdict(int)
 
 try:
-    read_data(Q_table, N_table, "./data/qlearning_data/ntable.txt", "./data/qlearning_data/qtable.txt")
+    read_data(Q_table, N_table, "./data/sarsa_data/ntable.txt", "./data/sarsa_data/qtable.txt")
 except:
     print("No data to read")
 # others 
@@ -52,12 +52,12 @@ prev_a = 0
 def read_data(action_value, action_times, value_path, times_path):
     value_file_size = os.stat(value_path).st_size
     if value_file_size != 0:
-        with open(path, 'rb') as handle:
+        with open(value_path, 'rb') as handle:
             action_value = pickle.loads(handle.read())
 
-    times_file_size = os.stat(time_path).st_size
+    times_file_size = os.stat(times_path).st_size
     if times_file_size != 0:
-        with open(path, 'rb') as handle:
+        with open(times_path, 'rb') as handle:
             action_times = pickle.loads(handle.read())
 
 def save_data(action_value, action_times, value_path, times_path):
@@ -79,7 +79,7 @@ def epsilon_greedy(s, epsilon):
 
 def update_Q_value(prev_state, action, reward, next_state, done):
     # get the q value for next state with its possible acitons ['possible action' due to epsilon-greedy action selection]
-    next_action = epsilon_greedy(next_state)
+    next_action = epsilon_greedy(next_state, epsilon)
     q_value_next_state = Q_table[next_state, next_action]
     # update N table
     N_table[prev_state, action] = N_table[prev_state, action] + 1
