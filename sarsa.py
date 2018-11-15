@@ -131,5 +131,5 @@ for sameple in range(samples):
     print("Utility value: ")
     print(utility)
     df2 = pd.DataFrame([[steps, utility]], columns=["Steps", "Ut1ility"])
-    df2.to_csv("qlearning_out.csv", header=None, mode="a")
+    df2.to_csv("sarsa_out.csv", header=None, mode="a")
     save_data(Q_table, N_table, "./data/sarsa_data/ntable.txt", "./data/sarsa_data/qtable.txt")
