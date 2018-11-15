@@ -87,5 +87,3 @@ for sameple in range(samples):
     print("Utility value: ")
     print(utility)
     print(list(Q_table.items()))
-
-

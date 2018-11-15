@@ -1,3 +1,5 @@
+import os
+import pickle
 import math
 import cv2
 import numpy as np
@@ -30,8 +32,8 @@ def run_trials(saved, i_observation, action_Q, action_times, sameple_times):
     # increase the count of the action
     action_times[action] = action_times[action] + 1
 
-    # look ahead 100 steps for each sampled action
-    trial_steps = 100
+    # look ahead 30 steps for each sampled action
+    trial_steps = 30
     trial_reward = 0
     trial_utility = reward
     gamma = 0.5
@@ -59,14 +61,36 @@ def run_trials(saved, i_observation, action_Q, action_times, sameple_times):
     action_value[action] = (action_Q[action]/action_times[action] + c*math.sqrt(math.log(sameple_times+1)/(action_times[action]+0.0000000001)))
 
 def parallel_run_trials(action_samples, saved, i_observation, action_Q, action_times):
-    # assign 4 processors
-    pool = mp.Pool(4)
+    # max number of processes run at the same time
+    pool = mp.Pool(30)
     [pool.apply_async(run_trials(saved, i_observation, action_Q, action_times, sameple_times)) for sameple_times in range(action_samples)]  
-    # shut down the pool
+    # no more new processes
     pool.close() 
+    # wait till all trails return as we are using async 
+    pool.join()
 
+def read_data(action_value, action_times, path):
+    file_size = os.stat(path).st_size
+    if file_size != 0:
+        with open(path, 'rb') as handle:
+            action_value = pickle.loads(handle.read())
+
+    file_size = os.stat(path).st_size
+    if file_size != 0:
+        with open(path, 'rb') as handle:
+            action_times = pickle.loads(handle.read())
+
+def save_data(action_value, action_times, path):
+    with open(path, 'wb') as handle:
+        pickle.dump(action_value, handle)
+    with open(path, 'wb') as handle:
+        pickle.dump(action_times, handle)
+
+read_data(action_value, action_times, "/Users/ljy/CS4246/data/mct_data/value.txt")
 # run game for total steps
 total = 23
+print("Number of CPU on this machine:")
+print(mp.cpu_count())
 for episode in range(total):
     # initialize the environment
     i_observation = env.reset()
@@ -82,7 +106,7 @@ for episode in range(total):
         
         # evaluate actions
         # sample k number times of actions, run trials to evaluate them
-        k = 30
+        k = 50
 
         # record down the avergae value for each action simulated
         action_Q = dict.fromkeys([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 0)
@@ -111,3 +135,4 @@ for episode in range(total):
             print("Episode finished after {} time steps".format(episode+1))
             break
 env.close()
+save_data(action_value, action_times, "/Users/ljy/CS4246/data/mct_data/value.txt")
