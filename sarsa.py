@@ -1,4 +1,4 @@
-rom collections import defaultdict, namedtuple
+from collections import defaultdict, namedtuple
 from sympy.matrices import Matrix, ImmutableMatrix
 import gym
 import numpy as np
