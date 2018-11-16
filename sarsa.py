@@ -63,16 +63,14 @@ def read_data(action_value, action_times, value_path, times_path):
 def save_data(action_value, action_times, value_path, times_path):
     with open(value_path, 'wb') as handle:
         pickle.dump(action_value, handle, protocol=2)
-        handle.close() 
     with open(times_path, 'wb') as handle:
         pickle.dump(action_times, handle, protocol=2)
-        handle.close() 
 
 def epsilon_greedy(s, epsilon):
     if np.random.rand() < epsilon:
         return env.action_space.sample()
     # Pick the action with highest Q value.
-    qvals = {a: Q_table[s, a] for a in range(env.action_space.n)}
+    qvals = {a: Q_table[s, a] for a in range(18)}
     max_q = max(qvals.values())
 
     # In case multiple actions have the same maximum Q value.
@@ -90,7 +88,7 @@ def update_Q_value(prev_state, action, reward, next_state, next_action, done):
         reward + gamma * q_value_next_state * (1 - done)  - Q_table[prev_state, action])
 
 # run game for a number of runs
-samples = 1000
+samples = 10000
 eps_drop = (epsilon - final_epsilon) / samples * 2
 for sameple in range(samples):
     # initialize the environment
@@ -115,7 +113,7 @@ for sameple in range(samples):
         prev_s = curr_s
         curr_s = next_state
 
-        next_action = epsilon_greedy(curr_s, epsilon)
+        next_action = epsilon_greedy(ImmutableMatrix(curr_s), epsilon)
 
         update_Q_value(SavedState(ImmutableMatrix(prev_s)), prev_a, reward, SavedState(ImmutableMatrix(curr_s)), next_action, done)
         
@@ -133,7 +131,7 @@ for sameple in range(samples):
     print(steps)
     print("Utility value: ")
     print(utility)
-
+     
 df2 = pd.DataFrame([[steps, utility]], columns=["Steps", "Ut1ility"])
 df2.to_csv("sarsa_out.csv", header=None, mode="a")
 save_data(Q_table, N_table, "./data/sarsa_data/ntable.txt", "./data/sarsa_data/qtable.txt")

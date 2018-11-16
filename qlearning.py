@@ -52,12 +52,12 @@ prev_a = 0
 def read_data(action_value, action_times, value_path, times_path):
     value_file_size = os.stat(value_path).st_size
     if value_file_size != 0:
-        with open(path, 'rb') as handle:
+        with open(value_path, 'rb') as handle:
             action_value = pickle.loads(handle.read())
 
-    times_file_size = os.stat(time_path).st_size
+    times_file_size = os.stat(times_path).st_size
     if times_file_size != 0:
-        with open(path, 'rb') as handle:
+        with open(times_path, 'rb') as handle:
             action_times = pickle.loads(handle.read())
 
 def save_data(action_value, action_times, value_path, times_path):
@@ -129,6 +129,7 @@ for sameple in range(samples):
     print(steps)
     print("Utility value: ")
     print(utility)
-    df2 = pd.DataFrame([[steps, utility]], columns=["Steps", "Ut1ility"])
-    df2.to_csv("qlearning_out.csv", header=None, mode="a")
-    save_data(Q_table, N_table, "./data/qlearning_data/ntable.txt", "./data/qlearning_data/qtable.txt")
+     
+df2 = pd.DataFrame([[steps, utility]], columns=["Steps", "Ut1ility"])
+df2.to_csv("qlearning_out.csv", header=None, mode="a")
+save_data(Q_table, N_table, "./data/qlearning_data/ntable.txt", "./data/qlearning_data/qtable.txt")
