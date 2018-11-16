@@ -63,8 +63,10 @@ def read_data(action_value, action_times, value_path, times_path):
 def save_data(action_value, action_times, value_path, times_path):
     with open(value_path, 'wb') as handle:
         pickle.dump(action_value, handle, protocol=2)
+        handle.close() 
     with open(times_path, 'wb') as handle:
         pickle.dump(action_times, handle, protocol=2)
+        handle.close() 
 
 def epsilon_greedy(s, epsilon):
     if np.random.rand() < epsilon:
