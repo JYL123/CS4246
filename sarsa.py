@@ -77,9 +77,8 @@ def epsilon_greedy(s, epsilon):
     actions_with_max_q = [a for a, q in qvals.items() if q == max_q]
     return np.random.choice(actions_with_max_q)
 
-def update_Q_value(prev_state, action, reward, next_state, done):
-    # get the q value for next state with its possible acitons ['possible action' due to epsilon-greedy action selection]
-    next_action = epsilon_greedy(next_state, epsilon)
+def update_Q_value(prev_state, action, reward, next_state, next_action, done):
+    # get q value for pair (next_state, next action)
     q_value_next_state = Q_table[next_state, next_action]
     # update N table
     N_table[prev_state, action] = N_table[prev_state, action] + 1
@@ -114,7 +113,9 @@ for sameple in range(samples):
         prev_s = curr_s
         curr_s = next_state
 
-        update_Q_value(SavedState(ImmutableMatrix(prev_s)), prev_a, reward, SavedState(ImmutableMatrix(curr_s)), done)
+        next_action = epsilon_greedy(curr_s, epsilon)
+
+        update_Q_value(SavedState(ImmutableMatrix(prev_s)), prev_a, reward, SavedState(ImmutableMatrix(curr_s)), next_action, done)
         
         steps = steps + 1
 
@@ -130,6 +131,7 @@ for sameple in range(samples):
     print(steps)
     print("Utility value: ")
     print(utility)
-    df2 = pd.DataFrame([[steps, utility]], columns=["Steps", "Ut1ility"])
-    df2.to_csv("sarsa_out.csv", header=None, mode="a")
-    save_data(Q_table, N_table, "./data/sarsa_data/ntable.txt", "./data/sarsa_data/qtable.txt")
+
+df2 = pd.DataFrame([[steps, utility]], columns=["Steps", "Ut1ility"])
+df2.to_csv("sarsa_out.csv", header=None, mode="a")
+save_data(Q_table, N_table, "./data/sarsa_data/ntable.txt", "./data/sarsa_data/qtable.txt")
