@@ -6,6 +6,7 @@ import numpy as np
 import gym
 import copy
 import multiprocessing as mp
+import pandas as pd
 
 # set up the env
 env = gym.make('Centipede-ram-v0')
@@ -88,7 +89,7 @@ def save_data(action_value, action_times, path):
 
 read_data(action_value, action_times, "/Users/ljy/CS4246/data/mct_data/value.txt")
 # run game for total steps
-total = 23
+total = 100
 print("Number of CPU on this machine:")
 print(mp.cpu_count())
 for episode in range(total):
@@ -106,7 +107,7 @@ for episode in range(total):
         
         # evaluate actions
         # sample k number times of actions, run trials to evaluate them
-        k = 50
+        k = 10
 
         # record down the avergae value for each action simulated
         action_Q = dict.fromkeys([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 0)
@@ -124,6 +125,7 @@ for episode in range(total):
         print("best action: ")
         print(max_action)
         print(action_value[max_action])
+        
 
         observation, reward, done, info = env.step(max_action)
         i_observation = observation # update observation
@@ -134,5 +136,7 @@ for episode in range(total):
         if done:
             print("Episode finished after {} time steps".format(episode+1))
             break
+    df2 = pd.DataFrame([[step, utility]], columns=["Step", "Ut1ility"])
+    df2.to_csv("uct_out.csv", header=None, mode="a")
 env.close()
 save_data(action_value, action_times, "/Users/ljy/CS4246/data/mct_data/value.txt")

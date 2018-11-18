@@ -7,14 +7,12 @@ import random
 import pandas as pd
 import json
 import os
-import pickle
 import copy
-from random import seed
 from random import random
+from module import read_data, save_data
 
 # set up env
 env = gym.make('Centipede-ram-v0')
-seed(150)
 
 Qtablepath = "sarsa_Qtable.json"
 Ntablepath = "sarsa_Ntable.json"
@@ -31,9 +29,10 @@ Q_table = defaultdict(float)
 N_table = defaultdict(int)
 
 try:
-    read_data(Q_table, N_table, "./data/sarsa_data/ntable.txt", "./data/sarsa_data/qtable.txt")
+    read_data.read(Q_table, N_table, "./data/sarsa_data/ntable.txt", "./data/sarsa_data/qtable.txt")
 except:
     print("No data to read")
+
 # others 
 utility = 0 
 steps  = 0
@@ -48,23 +47,6 @@ SavedState = namedtuple('SavedState', ['state'])
 prev_s = None
 prev_r = 0
 prev_a = 0
-
-def read_data(action_value, action_times, value_path, times_path):
-    value_file_size = os.stat(value_path).st_size
-    if value_file_size != 0:
-        with open(value_path, 'rb') as handle:
-            action_value = pickle.loads(handle.read())
-
-    times_file_size = os.stat(times_path).st_size
-    if times_file_size != 0:
-        with open(times_path, 'rb') as handle:
-            action_times = pickle.loads(handle.read())
-
-def save_data(action_value, action_times, value_path, times_path):
-    with open(value_path, 'wb') as handle:
-        pickle.dump(action_value, handle, protocol=2)
-    with open(times_path, 'wb') as handle:
-        pickle.dump(action_times, handle, protocol=2)
 
 def epsilon_greedy(s, epsilon):
     if np.random.rand() < epsilon:
@@ -89,7 +71,9 @@ def update_Q_value(prev_state, action, reward, next_state, next_action, done):
 
 # run game for a number of runs
 samples = 10000
+# epsilon annealing 
 eps_drop = (epsilon - final_epsilon) / samples * 2
+# run game
 for sameple in range(samples):
     # initialize the environment
     curr_s = env.reset()
@@ -106,9 +90,6 @@ for sameple in range(samples):
         if reward is not None:
             prev_r = reward
             utility = utility + reward
-        
-        # if reward != 0.0:
-        #  print(reward)
 
         prev_s = curr_s
         curr_s = next_state
@@ -131,7 +112,8 @@ for sameple in range(samples):
     print(steps)
     print("Utility value: ")
     print(utility)
-     
+
+ # save data    
 df2 = pd.DataFrame([[steps, utility]], columns=["Steps", "Ut1ility"])
 df2.to_csv("sarsa_out.csv", header=None, mode="a")
-save_data(Q_table, N_table, "./data/sarsa_data/ntable.txt", "./data/sarsa_data/qtable.txt")
+save_data.save(Q_table, N_table, "./data/sarsa_data/ntable.txt", "./data/sarsa_data/qtable.txt")
