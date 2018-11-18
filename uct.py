@@ -1,12 +1,10 @@
-import os
-import pickle
 import math
-import cv2
 import numpy as np
 import gym
 import copy
 import multiprocessing as mp
 import pandas as pd
+from module import read_data, save_data
 
 # set up the env
 env = gym.make('Centipede-ram-v0')
@@ -70,24 +68,8 @@ def parallel_run_trials(action_samples, saved, i_observation, action_Q, action_t
     # wait till all trails return as we are using async 
     pool.join()
 
-def read_data(action_value, action_times, path):
-    file_size = os.stat(path).st_size
-    if file_size != 0:
-        with open(path, 'rb') as handle:
-            action_value = pickle.loads(handle.read())
+read_data.read(action_value, action_times, "./data/mct_data/value.txt", "./data/mct_data/times.txt")
 
-    file_size = os.stat(path).st_size
-    if file_size != 0:
-        with open(path, 'rb') as handle:
-            action_times = pickle.loads(handle.read())
-
-def save_data(action_value, action_times, path):
-    with open(path, 'wb') as handle:
-        pickle.dump(action_value, handle)
-    with open(path, 'wb') as handle:
-        pickle.dump(action_times, handle)
-
-read_data(action_value, action_times, "/Users/ljy/CS4246/data/mct_data/value.txt")
 # run game for total steps
 total = 100
 print("Number of CPU on this machine:")
@@ -138,5 +120,7 @@ for episode in range(total):
             break
     df2 = pd.DataFrame([[step, utility]], columns=["Step", "Ut1ility"])
     df2.to_csv("uct_out.csv", header=None, mode="a")
+
 env.close()
-save_data(action_value, action_times, "/Users/ljy/CS4246/data/mct_data/value.txt")
+
+save_data.save(action_value, action_times, "./data/mct_data/value.txt", "./data/mct_data/times.txt")
