@@ -111,8 +111,9 @@ for sameple in range(samples):
     print(steps)
     print("Utility value: ")
     print(utility)
+    
+    # save data    
+    df2 = pd.DataFrame([[steps, utility]], columns=["Steps", "Ut1ility"])
+    df2.to_csv("./performance/sarsa_out.csv", header=None, mode="a")
 
- # save data    
-df2 = pd.DataFrame([[steps, utility]], columns=["Steps", "Ut1ility"])
-df2.to_csv("sarsa_out.csv", header=None, mode="a")
 save_data.save(Q_table, N_table, "./data/sarsa_data/ntable.txt", "./data/sarsa_data/qtable.txt")

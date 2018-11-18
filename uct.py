@@ -119,7 +119,7 @@ for episode in range(total):
             print("Episode finished after {} time steps".format(episode+1))
             break
     df2 = pd.DataFrame([[step, utility]], columns=["Step", "Ut1ility"])
-    df2.to_csv("uct_out.csv", header=None, mode="a")
+    df2.to_csv("./performance/uct_out.csv", header=None, mode="a")
 
 env.close()
 
