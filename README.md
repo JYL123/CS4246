@@ -27,6 +27,8 @@ Atari game environments in the this project are all available on [Open AI](https
 
 ![Alt text](https://github.com/JYL123/Naive-Reinforcement-Learning-With-Atari-Games/blob/master/plot/q-learning_on_Taxi_v2.jpg)
 
+* For more information, please check this [report](https://github.com/JYL123/Naive-Reinforcement-Learning-With-Atari-Games/tree/master/report).
+
 ## Note
 
 * `pip install gym` and `pip install gym[atari]` to run atari game environments
