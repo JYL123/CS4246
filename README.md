@@ -1,7 +1,7 @@
 ## Naive-Reinforcement-Learning-With-Atari-Games 
 
 ## Game Environment
-Atari game environments in the this project are all available on [Open Ai](https://gym.openai.com/envs/#atari). The project focuses on [centipede-ram-v0](https://gym.openai.com/envs/Centipede-ram-v0/), BreakoutDeterministic-v4, and [Taxi-v2](https://gym.openai.com/envs/Taxi-v2/). We have selected these games to observe naive reinforcement learning algorithms (without neutral networks) on how well the algorihtms can guide the agent to play markovian games (Taxi-v2), and non-markovian games (BreakoutDeterministic-v4, Centipede-ram-v0). 
+Atari game environments in the this project are all available on [Open AI](https://gym.openai.com/envs/#atari). The project focuses on [centipede-ram-v0](https://gym.openai.com/envs/Centipede-ram-v0/), BreakoutDeterministic-v4, and [Taxi-v2](https://gym.openai.com/envs/Taxi-v2/). We have selected these games to observe naive reinforcement learning algorithms (without neutral networks) on how well the algorihtms can guide the agent to play markovian games (Taxi-v2), and non-markovian games (BreakoutDeterministic-v4, Centipede-ram-v0). 
 
 * [check observation variables](https://gym.openai.com/docs/#observations)
 * [check environment variables](https://gym.openai.com/docs/#environments)
