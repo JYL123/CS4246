@@ -9,11 +9,14 @@ Atari game environments in the this project are all available on [Open Ai](https
 
 ## Algorithms 
 ### Naive Q-Learning
-* [check this website](https://en.wikipedia.org/wiki/Q-learning)
+* [check this website for more details](https://en.wikipedia.org/wiki/Q-learning)
+* [check this page for implementation details](https://github.com/JYL123/Naive-Reinforcement-Learning-With-Atari-Games/blob/master/qlearning.py)
 ### SARSA
 * [check thsi website](https://en.wikipedia.org/wiki/State%E2%80%93action%E2%80%93reward%E2%80%93state%E2%80%93action)
+* [check this page for implementation details](https://github.com/JYL123/Naive-Reinforcement-Learning-With-Atari-Games/blob/master/sarsa.py)
 ### Monte Carlo Tree Search 
 * [check this website](http://mcts.ai/about/)
+* [check this page for implementation details](https://github.com/JYL123/Naive-Reinforcement-Learning-With-Atari-Games/blob/master/uct.py)
 
 ## Results
 * [SARSA plays Taxi-v2](https://github.com/JYL123/Naive-Reinforcement-Learning-With-Atari-Games/blob/master/plot/sarsa_on_Taxi.jpg)
@@ -23,7 +26,6 @@ Atari game environments in the this project are all available on [Open Ai](https
 * [Q-learning plays Taxi-v2](https://github.com/JYL123/Naive-Reinforcement-Learning-With-Atari-Games/blob/master/plot/q-learning_on_Taxi_v2.jpg)
 
 ![Alt text](https://github.com/JYL123/Naive-Reinforcement-Learning-With-Atari-Games/blob/master/plot/q-learning_on_Taxi_v2.jpg)
-
 
 ## Note
 
